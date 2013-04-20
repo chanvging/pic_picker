@@ -63,10 +63,10 @@ function guess_url_model(){
             url_model = first_url + '&p=@@';
         }
     }else{
-        //if(first_url.search(/[_-]\d\.html?$/)>0){
-        if(/[_-](\d)\.s?html?$/.test(first_url)){
+        if(/[$_-](\d+)\.s?html?$/.test(first_url)){
             guessed_page_number = parseInt(RegExp.$1, 10)+1;
-            url_model = first_url.replace(/([_-$])\d(\.s?html?)$/, '\$1@@\$2');
+            url_model = first_url.replace(/([$_-])\d+(\.s?html?)$/, '\$1@@\$2');
+			console.log(url_model);
         }else{
             url_model = first_url.replace(/(\.s?html?)$/, guess_char[guess_pointor++] + '@@\$1');
             guess_again = guess_pointor<guess_char.length;
