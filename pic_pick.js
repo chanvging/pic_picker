@@ -157,7 +157,7 @@ function bind_key(){
 					return false;
 					break;
 				case 65://a for download all pic
-					//download_all();
+					download_all();
 					return false;
 					break;
 				default:
@@ -450,21 +450,27 @@ function image_loaded(){
 }
 
 function download_all(){
-    var today = new Date();
-    var day_str = today.getFullYear() + '-' + (today.getMonth()+1) + '-' + today.getDate();
-    download_idx = 0;
-    pic_path = base_dir + '/' + day_str;
-    download_recursive();
+	for(var i=0; i<imgs.length; i++){
+		if(imgs[i]=='') continue;
+		console.log(i);
+		download(imgs[i]);
+	}
 }
 
-function download_recursive(){
-    if(download_idx>=imgs.length) return false;
-    send_pcs_post(imgs[download_idx++], download_recursive);
-}
-
-function download(){
+function download(img_src){
+	if(typeof img_src == 'undefined'){
+		img_src = imgs[idx];
+	}
+	if(img_src=='') return false;
+	var evt = document.createEvent('MouseEvents');
+	evt.initMouseEvent("click", !1, !1, window, 1, 0, 0, 0, 0, !1, !0, !1, !1, 0, null);
+	var download_box = document.createElement('a');
+	download_box.href = img_src;
+	download_box.dispatchEvent(evt);
+/*
     pic_path = base_dir;
     send_pcs_post(imgs[idx]);
+*/
 }
 
 function send_pcs_post(pic_src, callback){
