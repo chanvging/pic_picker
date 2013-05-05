@@ -1,6 +1,7 @@
 var idx = 0;
 var parser_box = document.createElement('div');
 var imgs = [];
+var small_imgs = [];
 var urls = [];
 var ready_to_show = false;
 var displayer = 0;
@@ -106,6 +107,9 @@ function init_ui(){
 		canvas.style.display = 'none';
 		cContext = canvas.getContext('2d');
 		mask_frame.appendChild(canvas);
+		
+		$('<div class="dock" id="dock2"><div class="dock-container"><a class="dock-item2" href="#"><span>Home</span><img src="images/home.png" alt="home" /></a> </div></div>').appendTo(document.body);
+		
 	}
 	
 }
@@ -178,11 +182,43 @@ function bind_key(){
 
 function not_big_pic(src){
     if(typeof(src)!='string') return true;
-    if(src.indexOf('.gif')>0 && src.indexOf('.jpg')==-1) return true;
-    if(src.indexOf('.png')>0 && src.indexOf('.jpg')==-1) return true;
-    if(src.indexOf('.htm')>0 && src.indexOf('.jpg')==-1) return true;
+	if($.inArray(src, small_imgs)>=0){
+		return true;
+	}
+    if(src.indexOf('.gif')>0 && src.indexOf('.jpg')==-1){
+		small_imgs.push(src);
+		return true;
+	}
+    if(src.indexOf('.png')>0 && src.indexOf('.jpg')==-1){
+		small_imgs.push(src);
+		return true;
+	}
+    if(src.indexOf('.htm')>0 && src.indexOf('.jpg')==-1){
+		small_imgs.push(src);
+		return true;
+	}
     return false;
 }
+
+function check_pic_size(src){
+console.log(src);
+	var img_obj = $('<img>');
+	img_obj.attr('src', src);
+	img_obj.load(function(){
+		console.log('height:'+$(this).height()+' width:'+$(this).width());
+		if($(this).height()>=height_limit || $(this).width()>=width_limit){
+			if($.inArray(src, small_imgs)==-1) imgs.push(src);
+			if(idx==-1){
+				next_img();
+			}
+		}else{
+			small_imgs.push(src);
+		}
+		$(this).remove();
+	});
+	img_obj.hide().appendTo('body');
+}
+
 function get_images(obj){
 
     if(typeof(obj)=='object'){
@@ -191,7 +227,7 @@ function get_images(obj){
         var len = images.length;
         for(var i=0; i<len; i++){
             if(images[i].src && !not_big_pic(images[i].src)){
-                imgs.push(images[i].src);
+                check_pic_size(images[i].src);
 				has_pics = true;
             }
         }
@@ -200,14 +236,10 @@ function get_images(obj){
         len = inputs.length;
         for(var i=0; i<len; i++){
             if(inputs[i].type='image' && inputs[i].src && !not_big_pic(inputs[i].src)){
-                imgs.push(inputs[i].src);
+                check_pic_size(inputs[i].src);
 				has_pics = true;
             }
         }
-		
-		if(has_pics && idx==-1){
-			next_img();
-		}
 		
 		if(!has_pics && next_url_type=='guess' && (next_url_model!='' || !guess_again)){
 			remove_same_pic();
@@ -303,7 +335,10 @@ function remove_same_pic(){
                 same = true;
             }
         }
-        if(same) imgs[i] = '';
+        if(same){
+			small_imgs.push(imgs[i]);
+			imgs[i] = '';
+		}
     }
 }
 
@@ -441,10 +476,6 @@ function rotate(real_degree){
 }
 
 function image_loaded(){
-    if(typeof(img_player.height)=='undefined' || typeof(img_player.width)=='undefined' || (img_player.height<height_limit && img_player.width<width_limit)){
-        del_pic();
-        return false;
-    }
     if(!holdon) return false;
     rotate(degree);
 }
