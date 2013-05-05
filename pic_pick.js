@@ -89,7 +89,7 @@ function init_ui(){
 		mask_frame.style.zIndex = '1000';
 		mask_frame.style.textAlign = 'center';
 		mask_frame.style.width = '100%';
-		mask_frame.style.minHeight = '300px';
+		mask_frame.style.minHeight = '100%';
 		//mask_frame.scrolling = 'auto';
 		//mask_frame.frameborder = 0;
 		mask_frame.style.backgroundColor = 'wheat';

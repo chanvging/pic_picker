@@ -1,11 +1,11 @@
 {
 	"name":"Pic Picker",
 	"description":"my tool to view pics",
-	"version":"2.0",
+	"version":"2.1",
 	
-	  "icons": {"16": "icons\\gallery16.png", 
-            "48": "icons\\gallery48.png",
-           "128": "icons\\gallery128.png"},
+	  "icons": {"16": "icons\\icon16.png", 
+            "48": "icons\\icon48.png",
+           "128": "icons\\icon128.png"},
 
 	"permissions":["tabs", "contextMenus", "http://*/*"],
 	"background":{
@@ -14,7 +14,7 @@
 		
   "browser_action": {
     "default_title": "Click to show image",
-    "default_icon": "icons\\gallery48.png"
+    "default_icon": "icons\\icon48.png"
   },
 	
 	"manifest_version":2
