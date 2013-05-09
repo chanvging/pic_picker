@@ -125,6 +125,11 @@ function init_ui(){
 			li_obj.clone().append(new_a_obj).appendTo(ul_obj);
 		}
 		menu_obj.append(ul_obj).appendTo(mask_frame);
+		menu_obj.hover(function(){
+			$(this).css('opacity', '1');
+		}, function(){
+			$(this).css('opacity', '0.5');
+		});
 		
 	}
 	
