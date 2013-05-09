@@ -19,5 +19,11 @@
 		"default_icon": "icons/icon48.png"
 	},
 
+	"web_accessible_resources": [
+		"menu/prev.png",
+		"menu/next.png",
+		"menu/play.png",
+		"menu/download.png"
+	],
 	"manifest_version": 2
 }

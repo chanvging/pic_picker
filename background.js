@@ -10,8 +10,7 @@ function init_picker(tab, code_str){
 
 chrome.extension.onMessage.addListener(function(request, sender, sendResponse){
 	chrome.tabs.executeScript(null, {file: "jquery-2.0.0.min.js"});
-	chrome.tabs.executeScript(null, {file: "idock/interface.js"});
-	chrome.tabs.insertCSS(null, {file: "idock/style.css"});
+	chrome.tabs.insertCSS(null, {file: "menu/menu.css"});
 	chrome.tabs.executeScript(null, {file: "pic_pick.js"}, function(){
 	//console.log('loading pic_pick.js');
 		chrome.tabs.executeScript(null, {code: request.code});

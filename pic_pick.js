@@ -108,7 +108,23 @@ function init_ui(){
 		cContext = canvas.getContext('2d');
 		mask_frame.appendChild(canvas);
 		
-		$('<div class="dock" id="dock2"><div class="dock-container"><a class="dock-item2" href="#"><span>Home</span><img src="images/home.png" alt="home" /></a> </div></div>').appendTo(document.body);
+		var menus = [
+			["Prev","menu/prev.png", function(){next_img('left');}],
+			["Next","menu/next.png", function(){next_img('right');}],
+			["Play","menu/play.png", function(){auto_display();}],
+			["Download","menu/download.png", function(){download();}],
+		];
+		
+		menu_obj = $('<div>').addClass('expand-up');
+		var ul_obj = $('<ul>');
+		var li_obj = $('<li>');
+		var a_obj = $('<a href="javascript:;">');
+		for(var i=0; i<menus.length; i++){
+			var img_url = chrome.extension.getURL(menus[i][1]);
+			var new_a_obj = a_obj.clone().click(menus[i][2]).html('<span>'+menus[i][0]+'</span><img src="'+img_url+'"/>');
+			li_obj.clone().append(new_a_obj).appendTo(ul_obj);
+		}
+		menu_obj.append(ul_obj).appendTo(mask_frame);
 		
 	}
 	
