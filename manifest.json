@@ -23,6 +23,11 @@
 		"menu/prev.png",
 		"menu/next.png",
 		"menu/play.png",
+		"menu/pause.png",
+		"menu/close.png",
+		"menu/delete.png",
+		"menu/download_all.png",
+		"menu/rotate.png",
 		"menu/download.png"
 	],
 	"manifest_version": 2

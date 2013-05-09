@@ -11,7 +11,7 @@ var width_limit=300, height_limit=300;
 var guessed_page_number = 2;
 var guess_again = false;
 var guess_pointor = 0;
-var guess_char = ['_', '-', '$'];
+var guess_char = ['_', '-', '$', ''];
 var degree = 0;
 var base_dir = '/apps/picpicker';
 var pic_path = base_dir;
@@ -96,10 +96,18 @@ function init_ui(){
 		mask_frame.style.backgroundColor = 'wheat';
 		document.body.appendChild(mask_frame);
 		
-		page_info = document.createElement('p');
-		mask_frame.appendChild(page_info);
+		page_info = $('<div>');
+		page_info.css({
+			'position':'fixed',
+			'top':'5px',
+			'left':'10px',
+			'font-size':'30px',
+			'color':'black',
+			'font-family':'Arial, Helvetica, sans-serif'
+		}).appendTo(mask_frame);
 		
 		img_player = document.createElement('img');
+		img_player.style.margin = '20px 0 80px 0';
 		img_player.onload = image_loaded;
 		mask_frame.appendChild(img_player);
 		
@@ -111,8 +119,16 @@ function init_ui(){
 		var menus = [
 			["Prev","menu/prev.png", function(){next_img('left');}],
 			["Next","menu/next.png", function(){next_img('right');}],
-			["Play","menu/play.png", function(){auto_display();}],
+			["Play","menu/play.png", function(){
+				auto_display();
+				var pic_name = displayer==0 ? 'play.png' : 'pause.png';
+				$(this).children('img').attr('src', chrome.extension.getURL('menu/'+pic_name));
+			}],
 			["Download","menu/download.png", function(){download();}],
+			["Download All","menu/download_all.png", function(){download_all();}],
+			["Rotate","menu/rotate.png", function(){rotate();}],
+			["Delete","menu/delete.png", function(){del_pic();}],
+			["Close","menu/close.png", function(){stop_show();}],
 		];
 		
 		menu_obj = $('<div>').addClass('expand-up');
@@ -130,7 +146,7 @@ function init_ui(){
 		}, function(){
 			$(this).css('opacity', '0.5');
 		});
-		
+				
 	}
 	
 }
@@ -381,7 +397,7 @@ function next_img(direct){
     }else if(idx<0){
         idx = imgs.length-1;
     }
-    page_info.innerHTML = (idx+1) + '/' +imgs.length;
+    page_info.html((idx+1) + '/' +imgs.length);
     if(imgs[idx]){
         img_player.src = imgs[idx];
     }else{
