@@ -117,8 +117,6 @@ function init_ui(){
 		mask_frame.appendChild(canvas);
 		
 		var menus = [
-			["Prev","menu/prev.png", function(){next_img('left');}],
-			["Next","menu/next.png", function(){next_img('right');}],
 			["Play","menu/play.png", function(){
 				auto_display();
 				var pic_name = displayer==0 ? 'play.png' : 'pause.png';
@@ -146,6 +144,38 @@ function init_ui(){
 		}, function(){
 			$(this).css('opacity', '0.5');
 		});
+		
+		next_div = $('<div>');
+		next_div.css({
+			'position':'fixed',
+			'background-position':'center',
+			'width':'96px',
+			'height':'100%',
+			'top': 0,
+			'opacity': '0',
+			'background-repeat': 'no-repeat',
+			'cursor':'pointer',
+		});
+		prev_div = next_div.clone();
+		next_div.hover(function(){
+			$(this).css('opacity', '1');
+		}, function(){
+			$(this).css('opacity', '0');
+		}).click(function(){next_img('right');});
+		prev_div.hover(function(){
+			$(this).css('opacity', '1');
+		}, function(){
+			$(this).css('opacity', '0');
+		}).click(function(){next_img('left');});
+		next_div.css({
+			'right':0,
+			'background-image':'url('+chrome.extension.getURL('menu/next.png')+')',
+		});
+		prev_div.css({
+			'left':0,
+			'background-image':'url('+chrome.extension.getURL('menu/prev.png')+')',
+		});
+		$(mask_frame).append(next_div).append(prev_div);
 				
 	}
 	
