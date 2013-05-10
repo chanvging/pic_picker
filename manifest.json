@@ -1,7 +1,7 @@
 {
 	"name": "Pic Picker",
 	"description": "my tool to view pics",
-	"version": "2.1",
+	"version": "3.0",
 
 	"icons": {
 		"16": "icons/icon16.png",
@@ -28,7 +28,8 @@
 		"menu/delete.png",
 		"menu/download_all.png",
 		"menu/rotate.png",
-		"menu/download.png"
+		"menu/download.png",
+		"image/loading.gif"
 	],
 	"manifest_version": 2
 }

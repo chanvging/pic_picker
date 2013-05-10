@@ -31,6 +31,8 @@ function pick_pic(url){
     }else{
         first_url = url;
     }
+	
+	token = 'token_'+(new Date).getTime();
     	
 	urls.push(first_url);
 	get_content(first_url);
@@ -103,12 +105,17 @@ function init_ui(){
 			'left':'10px',
 			'font-size':'30px',
 			'color':'black',
-			'font-family':'Arial, Helvetica, sans-serif'
+			'font-family':'Arial, Helvetica, sans-serif',
+			'background-repeat': 'no-repeat',
+			'background-position':'middle',
 		}).appendTo(mask_frame);
 		
 		img_player = document.createElement('img');
 		img_player.style.margin = '20px 0 80px 0';
 		img_player.onload = image_loaded;
+		$(img_player).error(function(){
+			$(this).remove();
+		});
 		mask_frame.appendChild(img_player);
 		
 		canvas = document.createElement('canvas');
@@ -178,6 +185,8 @@ function init_ui(){
 		$(mask_frame).append(next_div).append(prev_div);
 				
 	}
+	
+	page_info.css('background-image', 'url('+chrome.extension.getURL('image/loading.gif')+')');
 	
 }
 
@@ -270,18 +279,24 @@ function not_big_pic(src){
 function check_pic_size(src){
 console.log(src);
 	var img_obj = $('<img>');
+	img_obj.addClass(token);
 	img_obj.attr('src', src);
 	img_obj.load(function(){
 		console.log('height:'+$(this).height()+' width:'+$(this).width());
 		if($(this).height()>=height_limit || $(this).width()>=width_limit){
-			if($.inArray(src, small_imgs)==-1) imgs.push(src);
-			if(idx==-1){
-				next_img();
+			if($.inArray(src, small_imgs)==-1 && $(this).hasClass(token)){
+				imgs.push(src);
+				if(idx==-1){
+					next_img();
+				}
 			}
 		}else{
 			small_imgs.push(src);
 		}
 		$(this).remove();
+		if(stop_getting==true && $('.'+token).length==0){
+			all_pic_gotten();
+		}
 	});
 	img_obj.hide().appendTo('body');
 }
@@ -309,8 +324,9 @@ function get_images(obj){
         }
 		
 		if(!has_pics && next_url_type=='guess' && (next_url_model!='' || !guess_again)){
-			remove_same_pic();
+			//remove_same_pic();
 			show_pic_list();
+			stop_getting = true;
 			return false;
 		}
     }
@@ -332,8 +348,9 @@ function get_images(obj){
     }
 	
     if(!url_send){
-        remove_same_pic();
+        //remove_same_pic();
         show_pic_list();
+		stop_getting = true;
     }
 }
 
@@ -392,6 +409,7 @@ function get_guessed_next_url(){
 }
 
 function remove_same_pic(){
+console.log('removing same pics');
     var same = false;
     for(var i=0; i<imgs.length; i++){
         if(imgs[i]=='') continue;
@@ -407,6 +425,11 @@ function remove_same_pic(){
 			imgs[i] = '';
 		}
     }
+}
+
+function all_pic_gotten(){
+	page_info.css('background-image','none');
+	remove_same_pic()
 }
 
 function next_img(direct){
@@ -626,6 +649,7 @@ function make_query_str(pic_src){
 
 function stop_show(){
 	stop_getting = true;
+	$('.'+token).remove();
 	hide_mask();
 	if(displayer!=0){
         clearInterval(displayer);
