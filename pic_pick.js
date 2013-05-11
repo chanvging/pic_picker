@@ -107,7 +107,7 @@ function init_ui(){
 			'color':'black',
 			'font-family':'Arial, Helvetica, sans-serif',
 			'background-repeat': 'no-repeat',
-			'background-position':'middle',
+			'background-position':'center',
 		}).appendTo(mask_frame);
 		
 		img_player = document.createElement('img');
@@ -487,9 +487,13 @@ function get_content(url){
 					next_url_model = url_model;
 				}
                 parse_pic(xmlhttp.responseText);
-            }else if(xmlhttp.status==404 && guess_again==true){
-                guessed_page_number--;
-                get_images();
+            }else if(xmlhttp.status==404){
+				if(guess_again==true){
+					guessed_page_number--;
+					get_images();				
+				}else{
+					stop_getting = false;
+				}
             }
         }
     }
